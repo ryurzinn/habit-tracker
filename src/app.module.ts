@@ -3,6 +3,7 @@ import { HabitsModule } from './habits/habits.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Habit } from './habits/entities/habit.entity';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { ConfigModule } from '@nestjs/config';
       entities: [Habit],
       synchronize: true, // ⚠️ SOLO para dev
     }),
-    HabitsModule
+    HabitsModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
