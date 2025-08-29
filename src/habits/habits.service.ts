@@ -1,26 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateHabitDto } from './dto/create-habit.dto';
 import { UpdateHabitDto } from './dto/update-habit.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Habit } from './entities/habit.entity';
+import { Repository } from 'typeorm';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class HabitsService {
-  create(createHabitDto: CreateHabitDto) {
-    return 'This action adds a new habit';
+
+  constructor(
+    @InjectRepository(Habit)
+    private readonly habitRepository: Repository<Habit>
+  ) {}
+
+  async create(createHabitDto: CreateHabitDto) {
+    const newHabit = await this.habitRepository.create(createHabitDto);
+    return await this.habitRepository.save(newHabit);
   }
 
-  findAll() {
-    return `This action returns all habits`;
+  async findAll() {
+    return await this.habitRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} habit`;
+  async findOne(id: string) {
+    return await this.habitRepository.findOneBy({id: id});
   }
 
-  update(id: number, updateHabitDto: UpdateHabitDto) {
-    return `This action updates a #${id} habit`;
+  async update(id: string, updateHabitDto: UpdateHabitDto) {
+     
+    const habit = await this.habitRepository.preload({ id ,...updateHabitDto});
+    if(!habit) throw new NotFoundException("Habit doesn't exist");
+  
+    return await this.habitRepository.save(habit);
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} habit`;
+  async remove(id: string) {
+    return await this.habitRepository.delete(id);
   }
 }

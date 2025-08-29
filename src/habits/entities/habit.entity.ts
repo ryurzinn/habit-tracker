@@ -3,16 +3,30 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeor
 @Entity('habits')
 export class Habit {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
-    @Column()
+    @Column('text', {
+        unique:true
+    })
     nombre: string;
 
-    @Column({nullable: true})
+    @Column('text', {
+        nullable: true
+    })
     descripcion?: string;
 
     @CreateDateColumn()
     fechaCreacion: Date;
+
+    @Column('text', {
+        nullable: true
+    })
+    frecuencia?: string;
+
+    @Column('text', {
+        nullable: true
+    })
+    categoria?: string;
 
 }
