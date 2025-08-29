@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-auth.dto';
-import { UpdateUserDto } from './dto/update-auth.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
@@ -32,6 +31,13 @@ export class AuthService {
 
       await this.userRepository.save(user);
 
+      const {password: _, ...result} = user;
+
+      return {
+        ...result,
+        token: this.getJwtToken({id: user.id})
+      }
+
     } catch (error) {
        this.handleDBErrors(error);
     }
@@ -50,6 +56,11 @@ export class AuthService {
     if(!user) throw new UnauthorizedException('Credentials are not valid (email)');
 
     if( !bcrypt.compareSync(password, user.password) ) throw new UnauthorizedException('Credentials are not valid (password)' );
+
+    return {
+      ...user,
+      jwt: this.getJwtToken({id: user.id})
+    }
 
   }
 
