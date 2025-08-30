@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { User } from 'src/auth/entities/user.entity';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity('habits')
 export class Habit {
@@ -28,6 +29,13 @@ export class Habit {
         nullable: true
     })
     categoria?: string;
+
+    @ManyToOne(
+    ( ) => User,
+    (user) => user.habit,
+    {eager: true}
+)
+    user: User;
 
 
 }

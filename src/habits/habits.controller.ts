@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from
 import { HabitsService } from './habits.service';
 import { CreateHabitDto } from './dto/create-habit.dto';
 import { UpdateHabitDto } from './dto/update-habit.dto';
+import { User } from 'src/auth/entities/user.entity';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
 
 @Controller('habits')
 export class HabitsController {
@@ -10,8 +12,11 @@ export class HabitsController {
   ) {}
 
   @Post()
-  create(@Body() createHabitDto: CreateHabitDto) {
-    return this.habitsService.create(createHabitDto);
+  create(
+    @Body() createHabitDto: CreateHabitDto, 
+    @GetUser() user: User,
+  ) {
+    return this.habitsService.create(createHabitDto, user);
   }
 
   @Get()
