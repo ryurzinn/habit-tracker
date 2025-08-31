@@ -5,6 +5,7 @@ import { Habit } from './habits/entities/habit.entity';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { User } from './auth/entities/user.entity';
+import { TrackingHabitsModule } from './tracking-habits/tracking-habits.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { User } from './auth/entities/user.entity';
       synchronize: true, // ⚠️ SOLO para dev
     }),
     HabitsModule,
-    AuthModule
+    AuthModule,
+    TrackingHabitsModule
   ],
   controllers: [],
   providers: [],
