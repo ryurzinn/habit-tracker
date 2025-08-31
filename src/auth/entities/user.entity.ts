@@ -1,4 +1,5 @@
-import {Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Habit } from 'src/habits/entities/habit.entity';
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -29,4 +30,11 @@ export class User {
         default: ['user']
     })
     roles: string[];
+
+    @OneToMany(
+        ( ) => Habit,
+        (habit) => habit.user,
+    )
+    habit: Habit[];
+
 }
