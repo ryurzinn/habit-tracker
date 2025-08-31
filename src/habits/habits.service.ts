@@ -47,12 +47,16 @@ export class HabitsService {
     return await this.habitRepository.findOneBy({id: id});
   }
 
-  async update(id: string, updateHabitDto: UpdateHabitDto) {
+  async update(id: string, updateHabitDto: UpdateHabitDto, user: User){
      
     const habit = await this.habitRepository.preload({ id ,...updateHabitDto});
+
     if(!habit) throw new NotFoundException("Habit doesn't exist");
+
+    habit.user = user;
   
     return await this.habitRepository.save(habit);
+
 
   }
 

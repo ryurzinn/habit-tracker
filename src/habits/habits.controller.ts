@@ -4,6 +4,7 @@ import { CreateHabitDto } from './dto/create-habit.dto';
 import { UpdateHabitDto } from './dto/update-habit.dto';
 import { User } from 'src/auth/entities/user.entity';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @Controller('habits')
 export class HabitsController {
@@ -12,6 +13,7 @@ export class HabitsController {
   ) {}
 
   @Post()
+  @Auth()
   create(
     @Body() createHabitDto: CreateHabitDto, 
     @GetUser() user: User,
@@ -30,13 +32,17 @@ export class HabitsController {
   }
 
   @Patch(':id')
+  @Auth()
   update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateHabitDto: UpdateHabitDto) {
-    return this.habitsService.update(id, updateHabitDto);
+    @Body() updateHabitDto: UpdateHabitDto,
+    @GetUser() user: User
+  ) {
+    return this.habitsService.update(id, updateHabitDto, user);
   }
 
   @Delete(':id')
+  @Auth()
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.habitsService.remove(id);
   }
