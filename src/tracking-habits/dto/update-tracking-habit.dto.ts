@@ -1,4 +1,4 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateTrackingHabitDto } from './create-tracking-habit.dto';
+import { MarkHabitCompleteDto } from './MarkHabitComplete.dto';
 
-export class UpdateTrackingHabitDto extends PartialType(CreateTrackingHabitDto) {}
+export class UpdateTrackingHabitDto extends PartialType(MarkHabitCompleteDto) {}

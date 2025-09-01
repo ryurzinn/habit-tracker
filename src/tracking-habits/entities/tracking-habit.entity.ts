@@ -1,8 +1,10 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/auth/entities/user.entity";
+import { Habit } from "src/habits/entities/habit.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 
-@Entity('tracking-habits')
-export class TrackingHabit {
+@Entity('habitCompletion')
+export class HabitCompletion {
 
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -20,8 +22,21 @@ export class TrackingHabit {
     })
     notes?: string;
 
-  
+    
+    @ManyToOne(
+    ( ) => User,
+    (user) => user.habitCompletion,
+    {eager: true}
+   )
+    user: User;
 
+
+    @ManyToOne(
+    ( ) => Habit,
+    (habit) => habit.habitCompletion,
+    {eager: true}
+   )
+    habit: Habit[];
     
 
 }

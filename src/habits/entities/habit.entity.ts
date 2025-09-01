@@ -1,5 +1,6 @@
 import { User } from 'src/auth/entities/user.entity';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { HabitCompletion } from 'src/tracking-habits/entities/tracking-habit.entity';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity('habits')
 export class Habit {
@@ -34,8 +35,14 @@ export class Habit {
     ( ) => User,
     (user) => user.habit,
     {eager: true}
-)
+   )
     user: User;
+
+    @OneToMany(
+    ( ) => HabitCompletion,
+    (habitCompletion) => habitCompletion.habit,
+   )
+    habitCompletion: HabitCompletion[];
 
 
 }

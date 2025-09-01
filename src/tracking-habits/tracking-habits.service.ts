@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTrackingHabitDto } from './dto/create-tracking-habit.dto';
+import { MarkHabitCompleteDto } from './dto/MarkHabitComplete.dto';
 import { UpdateTrackingHabitDto } from './dto/update-tracking-habit.dto';
 
 @Injectable()
 export class TrackingHabitsService {
-  create(createTrackingHabitDto: CreateTrackingHabitDto) {
+  create(createTrackingHabitDto: MarkHabitCompleteDto) {
     return 'This action adds a new trackingHabit';
   }
 
