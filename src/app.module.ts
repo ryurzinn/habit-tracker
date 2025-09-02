@@ -5,7 +5,8 @@ import { Habit } from './habits/entities/habit.entity';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { User } from './auth/entities/user.entity';
-import { TrackingHabitsModule } from './tracking-habits/tracking-habits.module';
+import { HabitTrackingModule } from './tracking-habits/tracking-habits.module';
+import { HabitCompletion } from './tracking-habits/entities/habit-completion.entity';
 
 @Module({
   imports: [
@@ -19,12 +20,12 @@ import { TrackingHabitsModule } from './tracking-habits/tracking-habits.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Habit, User],
+      entities: [Habit, User, HabitCompletion],
       synchronize: true, // ⚠️ SOLO para dev
     }),
     HabitsModule,
     AuthModule,
-    TrackingHabitsModule
+    HabitTrackingModule
   ],
   controllers: [],
   providers: [],

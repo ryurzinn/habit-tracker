@@ -36,7 +36,7 @@ export class HabitCompletion {
     (habit) => habit.habitCompletion,
     {eager: true}
    )
-    habit: Habit[];
+    habit: Habit;
     
 
 }

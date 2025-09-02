@@ -1,5 +1,5 @@
 import { Habit } from 'src/habits/entities/habit.entity';
-import { HabitCompletion as HabitCompletion } from 'src/tracking-habits/entities/tracking-habit.entity';
+import { HabitCompletion as HabitCompletion } from 'src/tracking-habits/entities/habit-completion.entity';
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')

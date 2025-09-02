@@ -1,34 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { TrackingHabitsService } from './tracking-habits.service';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { HabitTrackingService } from './tracking-habits.service';
 import { MarkHabitCompleteDto } from './dto/MarkHabitComplete.dto';
-import { UpdateTrackingHabitDto } from './dto/update-tracking-habit.dto';
+import { User } from 'src/auth/entities/user.entity';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 
-@Controller('tracking-habits')
-export class TrackingHabitsController {
-  constructor(private readonly trackingHabitsService: TrackingHabitsService) {}
+@Controller('tracking')
+export class HabitTrackingController {
+  constructor(private readonly trackingHabitsService: HabitTrackingService) {}
 
-  @Post()
-  create(@Body() createTrackingHabitDto: MarkHabitCompleteDto) {
-    return this.trackingHabitsService.create(createTrackingHabitDto);
+  @Post(':id/complete')
+  @Auth()
+  create(
+    @Body() markHabitCompleteHabitDto: MarkHabitCompleteDto,
+    @GetUser() user: User,
+    @Param('id', ParseUUIDPipe) habitId: string){
+   
+    return this.trackingHabitsService.markAsCompleted(markHabitCompleteHabitDto, habitId, user.id );
   }
 
-  @Get()
-  findAll() {
-    return this.trackingHabitsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.trackingHabitsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTrackingHabitDto: UpdateTrackingHabitDto) {
-    return this.trackingHabitsService.update(+id, updateTrackingHabitDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.trackingHabitsService.remove(+id);
-  }
 }

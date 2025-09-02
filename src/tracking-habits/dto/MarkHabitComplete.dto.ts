@@ -6,7 +6,7 @@ export class MarkHabitCompleteDto {
 
     @IsOptional()
     @IsDateString()
-    date: Date;
+    date?: Date;
 
     @IsString()
     @IsOptional()
