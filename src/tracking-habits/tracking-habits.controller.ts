@@ -11,12 +11,22 @@ export class HabitTrackingController {
 
   @Post(':id/complete')
   @Auth()
-  create(
+  createCompletion(
     @Body() markHabitCompleteHabitDto: MarkHabitCompleteDto,
     @GetUser() user: User,
     @Param('id', ParseUUIDPipe) habitId: string){
    
-    return this.trackingHabitsService.markAsCompleted(markHabitCompleteHabitDto, habitId, user.id );
+    return this.trackingHabitsService.createCompletion(markHabitCompleteHabitDto, habitId, user );
+  }
+
+  @Get(':id/progress')
+  @Auth()
+  getProgress(
+    @Body() markHabitCompleteHabitDto: MarkHabitCompleteDto,
+    @GetUser() user: User,
+    @Param('id', ParseUUIDPipe) habitId: string){
+   
+    return this.trackingHabitsService.getHabitProgress(markHabitCompleteHabitDto, habitId, user );
   }
 
 }

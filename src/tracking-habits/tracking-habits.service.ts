@@ -81,10 +81,18 @@ export class HabitTrackingService {
     return {
       habitId,
       habitTitle: habit.nombre,
+      markHabitCompleteHabitDto,
       totalCompletions: completions?.length
     }
+  }
+
+  //TODO: /// CREAR CURRENT STREAK
+  async calculateCurrentStreak(completions: HabitCompletion[]) {
+
+
 
 
   }
+
 
 }
