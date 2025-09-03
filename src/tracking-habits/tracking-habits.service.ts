@@ -87,12 +87,44 @@ export class HabitTrackingService {
   }
 
   //TODO: /// CREAR CURRENT STREAK
-  async calculateCurrentStreak(completions: HabitCompletion[]) {
+  private calculateCurrentStreak(completions: HabitCompletion[]): number {
+    if (completions.length === 0) return 0;
 
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
 
+    let streak = 0;
+    let currentDate = new Date();
 
+    const lastCompletion = new Date(completions[0].completedDate!);
 
+    if( this.isSameDate(lastCompletion, today) ) { // Completado hoy
+      streak = 1;
+      currentDate = new Date(today);
+      currentDate.setDate(currentDate.getDate() - 1);
+    } else if( this.isSameDate(lastCompletion, yesterday) ){ // Completado ayer
+      streak = 1;
+      currentDate = new Date(yesterday);
+      currentDate.setDate(currentDate.getDate() - 1);
+    } else{
+      return 0; // esto significa que la racha es 0
+    }
+
+    for( let i = 1; i < completions.length; i++){
+      const completionDate = new Date(completions[i].completedDate!);
+      if(  this.isSameDate( completionDate, lastCompletion) ) {
+        streak++;      
+        currentDate.setDate(currentDate.getDate() - 1)
+      } else{
+        break;
+      }
+    }
+     return streak;
   }
 
 
+  private isSameDate(date1: Date, date2: Date): boolean {
+    return ( date1.toDateString() === date2.toDateString() );
+  }
 }
