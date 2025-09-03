@@ -1,4 +1,5 @@
 import { Habit } from 'src/habits/entities/habit.entity';
+import { HabitCompletion as HabitCompletion } from 'src/tracking-habits/entities/habit-completion.entity';
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
@@ -32,9 +33,15 @@ export class User {
     roles: string[];
 
     @OneToMany(
-        ( ) => Habit,
-        (habit) => habit.user,
-    )
+    ( ) => Habit,
+    (habit) => habit.user,
+   )
     habit: Habit[];
+
+    @OneToMany(
+    ( ) => HabitCompletion,
+    (habitCompletion) => habitCompletion.user,
+   )
+    habitCompletion: HabitCompletion[];
 
 }
