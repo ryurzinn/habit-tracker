@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { MarkHabitCompleteDto } from './dto/MarkHabitComplete.dto';
 import { UpdateTrackingHabitDto } from './dto/update-tracking-habit.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -22,22 +22,68 @@ export class HabitTrackingService {
   ) {}
 
 
-  async markAsCompleted(markHabitCompleteHabitDto: MarkHabitCompleteDto, habitId: string, userId: string) {
+  async createCompletion(markHabitCompleteHabitDto: MarkHabitCompleteDto, habitId: string, user: User) {
 
+     const { date = new Date().toISOString().split('t')[0] } = markHabitCompleteHabitDto;
+
+    // Verificar si el habito existe y pertenece al usuario
     const habit = await this.habitRepository.findOne({
-      where: {id: habitId, user: {id: userId}}
+      where: {id: habitId, user: user}
     });
-    if(!habit) throw new NotFoundException('habit not found or does not belong to user');
+
+    if(!habit) 
+      throw new NotFoundException('habit not found or does not belong to user');
 
 
+    // Verificar si no se completo antes 
+    const existingComplete = await this.habitCompletionRepository.findOne({
+      where: {
+        completedDate: new Date(date),
+        habit: {id: habitId},
+        user: {id: user.id},
+      }
+    });
 
-    const completed = this.habitCompletionRepository.create({
+    if(existingComplete) 
+      throw new ConflictException('Habit already completed for this date');
+
+    // completar un nuevo habito
+    const completion = this.habitCompletionRepository.create({
       ...markHabitCompleteHabitDto,
       habit,
-      user: {id: userId},
+      user,
+      completedDate: new Date(date)
     });
 
-    if(!habit)return await this.habitCompletionRepository.save(completed); 
+    return await this.habitCompletionRepository.save(completion); 
+
+  }
+
+
+  async getHabitProgress(markHabitCompleteHabitDto: MarkHabitCompleteDto, habitId: string, user: User) {
+
+    // Verificar si el habito existe y pertenece al usuario
+    const habit = await this.habitRepository.findOne({
+      where: {id: habitId, user: user}
+    });
+
+    if(!habit) 
+      throw new NotFoundException('habit not found or does not belong to user');
+
+    const completions: HabitCompletion[] = await this.habitCompletionRepository.find({
+      where: {
+        habit: {id: habitId},
+        user: {id: user.id},
+      },
+      order: {completedDate: 'DESC'}
+    });
+
+    return {
+      habitId,
+      habitTitle: habit.nombre,
+      totalCompletions: completions?.length
+    }
+
 
   }
 
