@@ -123,6 +123,24 @@ export class HabitTrackingService {
      return streak;
   }
 
+  async viewCurrentStreak(habitId: string, user: User) {
+
+     const completion: HabitCompletion[] = await this.habitCompletionRepository.find({
+      where: {
+        habit: {id: habitId},
+        user: {id: user.id},
+      },
+      order: {completedDate: 'DESC'}
+    });
+
+    const streak = await this.calculateCurrentStreak(completion);
+
+    if(!streak) return 0;
+
+    return streak;
+
+  }
+
 
   private isSameDate(date1: Date, date2: Date): boolean {
     return ( date1.toDateString() === date2.toDateString() );

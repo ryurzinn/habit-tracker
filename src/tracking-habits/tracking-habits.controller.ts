@@ -29,4 +29,13 @@ export class HabitTrackingController {
     return this.trackingHabitsService.getHabitProgress(markHabitCompleteHabitDto, habitId, user );
   }
 
+  @Get(':id/streak')
+  @Auth()
+  getCurrentStreak(
+    @GetUser() user: User,
+    @Param('id', ParseUUIDPipe) habitId: string){
+   
+    return this.trackingHabitsService.viewCurrentStreak(habitId, user );
+  }
+
 }
