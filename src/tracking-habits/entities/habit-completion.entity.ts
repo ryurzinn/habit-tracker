@@ -9,10 +9,6 @@ export class HabitCompletion {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    //TODO: Se llena automaticamente cuando se crea un habito nuevo
-    @CreateDateColumn()
-    createdDate: Date;
-
     //TODO: Setear automaticamente como completado
     @Column({ type: 'timestamptz', nullable: true })
     completedDate: Date | null;
